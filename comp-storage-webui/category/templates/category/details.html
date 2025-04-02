@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="{% static 'category/categories.js' %}"></script>
+</head>
+<body>
+    <h1>Category Details</h1>
+    <form method="post" action="{% url 'category_update' category.id %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ category.name }}" required><br>
+
+        <label for="description">Description:</label> <br>
+        <textarea id="description" name="description">{{ category.description }}</textarea><br>
+
+
+        <label for="parents">Parents:</label> <br>
+
+        <input type="text" id="search" placeholder="Search or add a category...">
+        <button id="add-category" data-url="{% url 'category_new' %}">Add</button>
+        <div id="parents-div-active" class="tag-container">
+            {% for p_category in category.parents.all %}
+                <a href="" class="btn btn-outline-secondary tag active">{{ p_category.name }}</a>
+            {% endfor %}
+        </div>
+        <div id="parents-div-inactive" class="tag-container">
+            {% for p_category in categories %}
+                {% if p_category not in category.parents.all %}
+                    <a href="" class="btn btn-outline-secondary tag">{{ p_category.name }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <select id="parents" name="parents" multiple hidden>
+            {% for p_category in categories %}
+                <option value="{{ p_category.id }}" {% if p_category in category.parents.all %}selected{% endif %}>{{ p_category.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Update Category</button>
+    </form>
+</body>
+</html>

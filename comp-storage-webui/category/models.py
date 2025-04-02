@@ -4,7 +4,7 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True, blank=False, null=False)
     description = models.TextField(default='', blank=True, null=True)
-    parent = models.ManyToManyField('self', blank=True, null=True, symmetrical=False, related_name='children')
+    parents = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='children')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
